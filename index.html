@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kartaviy Game Hub</title>
+
+<style>
+:root{
+    --bg:#090b10;
+    --panel:#11151d;
+    --panel2:#171c25;
+    --line:#252c38;
+    --text:#f4f7fb;
+    --muted:#8e98a8;
+    --accent:#7c5cff;
+    --accent2:#9b85ff;
+    --green:#31d07c;
+    --yellow:#f4c95d;
+    --blue:#55a8ff;
+    --red:#ff5d6c;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:
+        radial-gradient(circle at 20% 0%,#171229 0,#090b10 35%);
+    color:var(--text);
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,
+    "Segoe UI",sans-serif;
+}
+
+button,input,select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.top{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:rgba(9,11,16,.86);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+}
+
+.nav{
+    max-width:1180px;
+    margin:auto;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.brand{
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.brand span{
+    color:var(--accent2);
+}
+
+.nav button,
+.btn{
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--text);
+    border-radius:11px;
+    padding:10px 14px;
+}
+
+.nav button:hover,
+.btn:hover{
+    border-color:var(--accent);
+}
+
+.container{
+    max-width:1180px;
+    margin:auto;
+    padding:38px 20px 60px;
+}
+
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:20px;
+    margin-bottom:25px;
+}
+
+h1{
+    font-size:clamp(30px,5vw,52px);
+    margin:0 0 8px;
+}
+
+.sub{
+    color:var(--muted);
+    margin:0;
+}
+
+.search{
+    width:min(330px,100%);
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:white;
+    padding:13px 15px;
+    border-radius:12px;
+    outline:none;
+}
+
+.search:focus{
+    border-color:var(--accent);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(250px,1fr));
+    gap:16px;
+}
+
+.card{
+    background:
+        linear-gradient(145deg,var(--panel),#0e1219);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px;
+    min-height:225px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    box-shadow:0 12px 35px #0003;
+    transition:.2s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    border-color:#3b4352;
+}
+
+.icon{
+    font-size:42px;
+}
+
+.title{
+    font-size:21px;
+    font-weight:800;
+    margin-top:8px;
+}
+
+.meta{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:10px 0;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.badge{
+    border:1px solid var(--line);
+    padding:5px 8px;
+    border-radius:999px;
+}
+
+.green{
+    color:var(--green);
+}
+
+.yellow{
+    color:var(--yellow);
+}
+
+.blue{
+    color:var(--blue);
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+}
+
+.play{
+    flex:1;
+    background:var(--accent);
+    border-color:var(--accent);
+    font-weight:800;
+}
+
+.play:hover{
+    background:var(--accent2);
+}
+
+.empty{
+    padding:30px;
+    text-align:center;
+    color:var(--muted);
+    border:1px dashed var(--line);
+    border-radius:16px;
+}
+
+/* ADMIN */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:#0009;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:20;
+}
+
+.modal.open{
+    display:flex;
+}
+
+.modalbox{
+    width:min(680px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#11151d;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:22px;
+}
+
+.modalhead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.close{
+    background:none;
+    border:0;
+    color:var(--muted);
+    font-size:28px;
+}
+
+.form{
+    display:grid;
+    gap:12px;
+    margin-top:18px;
+}
+
+.form input,
+.form select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:#0b0e14;
+    color:white;
+    outline:none;
+}
+
+.form input:focus,
+.form select:focus{
+    border-color:var(--accent);
+}
+
+.admin-list{
+    display:grid;
+    gap:10px;
+    margin-top:18px;
+}
+
+.admin-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    padding:12px;
+    border-radius:12px;
+}
+
+.small{
+    font-size:13px;
+    color:var(--muted);
+}
+
+.danger{
+    color:#ff8a95;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.note{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.5;
+    margin-top:16px;
+}
+
+@media(max-width:700px){
+
+    .hero{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .search{
+        width:100%;
+    }
+
+    .nav{
+        padding:13px 15px;
+    }
+
+    .container{
+        padding:28px 15px 50px;
+    }
+
+    .admin-item{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .admin-item .actions{
+        width:100%;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+
+    <nav class="nav">
+
+        <div class="brand">
+            KARTAVIY <span>GAME HUB</span>
+        </div>
+
+        <button id="adminBtn">
+            🔐 Админ
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main class="container">
+
+    <section class="hero">
+
+        <div>
+
+            <h1>Мои игры</h1>
+
+            <p class="sub">
+                Все проекты Kartaviy в одном месте.
+            </p>
+
+        </div>
+
+        <input
+            id="search"
+            class="search"
+            placeholder="🔎 Поиск игры..."
+        >
+
+    </section>
+
+
+    <section id="games" class="grid"></section>
+
+</main>
+
+
+
+<!-- ADMIN MODAL -->
+
+<div id="adminModal" class="modal">
+
+    <div class="modalbox">
+
+        <div class="modalhead">
+
+            <h2 id="modalTitle">
+                🔐 Админ-консоль
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginView">
+
+            <p class="small">
+                Вход только для владельца Hub.
+            </p>
+
+            <div class="form">
+
+                <input
+                    id="password"
+                    type="password"
+                    placeholder="Пароль администратора"
+                >
+
+                <button
+                    class="btn play"
+                    onclick="login()">
+                    Войти
+                </button>
+
+            </div>
+
+            <p class="note">
+                Это демонстрационная версия.
+                Пароль находится внутри JavaScript,
+                поэтому для настоящей защиты понадобится
+                серверная авторизация.
+            </p>
+
+        </div>
+
+
+
+        <!-- ADMIN -->
+
+        <div id="adminView" class="hidden">
+
+            <div class="actions">
+
+                <button
+                    class="btn play"
+                    onclick="showAdd()">
+                    ➕ Добавить игру
+                </button>
+
+                <button
+                    class="btn"
+                    onclick="logout()">
+                    Выйти
+                </button>
+
+            </div>
+
+
+            <div
+                id="adminList"
+                class="admin-list">
+            </div>
+
+
+            <p class="note">
+                Здесь можно управлять играми,
+                которые отображаются в основном меню.
+            </p>
+
+        </div>
+
+
+
+        <!-- ADD / EDIT -->
+
+        <div id="editView" class="hidden">
+
+            <div class="form">
+
+                <input
+                    id="fName"
+                    placeholder="Название игры"
+                >
+
+                <input
+                    id="fIcon"
+                    placeholder="Эмодзи, например 🏜️"
+                >
+
+                <input
+                    id="fVersion"
+                    placeholder="Версия, например v0.1.0"
+                >
+
+                <select id="fStatus">
+
+                    <option>
+                        В разработке
+                    </option>
+
+                    <option>
+                        Прототип
+                    </option>
+
+                    <option>
+                        В планах
+                    </option>
+
+                    <option>
+                        Готово
+                    </option>
+
+                </select>
+
+                <input
+                    id="fPath"
+                    placeholder="games/wild-west/index.html"
+                >
+
+
+                <div class="actions">
+
+                    <button
+                        class="btn play"
+                        onclick="saveGame()">
+                        💾 Сохранить
+                    </button>
+
+                    <button
+                        class="btn"
+                        onclick="backAdmin()">
+                        ← Назад
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/*
+==================================================
+KARTAVIY GAME HUB
+==================================================
+*/
+
+/* Пароль демо-админа */
+
+const ADMIN_PASSWORD = "KARTAVIY_ADMIN";
+
+
+/*
+Игры по умолчанию.
+Позже можно убрать их и подключить
+реальный список проектов.
+*/
+
+const DEFAULT_GAMES = [
+
+    {
+        id:"wild-west",
+        name:"Wild West",
+        icon:"🏜️",
+        version:"v0.1.0",
+        status:"В разработке",
+        path:"games/wild-west/index.html",
+        published:true
+    },
+
+    {
+        id:"president",
+        name:"President Simulator",
+        icon:"🏛️",
+        version:"v0.1.0",
+        status:"В разработке",
+        path:"games/president/index.html",
+        published:true
+    },
+
+    {
+        id:"hospital",
+        name:"Hospital Simulator",
+        icon:"🏥",
+        version:"v0.1.0",
+        status:"Прототип",
+        path:"games/hospital/index.html",
+        published:true
+    },
+
+    {
+        id:"kartaviy-city",
+        name:"Kartaviy City",
+        icon:"🏙️",
+        version:"v0.1.0",
+        status:"В планах",
+        path:"games/kartaviy-city/index.html",
+        published:true
+    }
+
+];
+
+
+let games =
+    JSON.parse(
+        localStorage.getItem("kartaviyGames")
+    )
+    || DEFAULT_GAMES;
+
+
+let editingId = null;
+
+
+/* Сохранение */
+
+function persist(){
+
+    localStorage.setItem(
+        "kartaviyGames",
+        JSON.stringify(games)
+    );
+
+}
+
+
+/* Цвет статуса */
+
+function statusClass(status){
+
+    if(status === "Готово")
+        return "green";
+
+    if(status === "В планах")
+        return "yellow";
+
+    return "blue";
+
+}
+
+
+/* Отрисовка игр */
+
+function render(){
+
+    const query =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const list =
+        games.filter(game => {
+
+            return game.published &&
+            (
+                game.name +
+                " " +
+                game.status
+            )
+            .toLowerCase()
+            .includes(query);
+
+        });
+
+
+    const box =
+        document.getElementById("games");
+
+
+    if(!list.length){
+
+        box.innerHTML = `
+            <div class="empty">
+                Игра не найдена.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    box.innerHTML = list.map(game => `
+
+        <article class="card">
+
+            <div>
+
+                <div class="icon">
+                    ${game.icon}
+                </div>
+
+                <div class="title">
+                    ${escapeHtml(game.name)}
+                </div>
+
+                <div class="meta">
+
+                    <span class="badge">
+                        ${escapeHtml(game.version)}
+                    </span>
+
+                    <span
+                        class="badge ${statusClass(game.status)}">
+                        ${escapeHtml(game.status)}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="btn play"
+                    onclick="play('${escapeAttr(game.path)}')">
+
+                    ▶️ Играть
+
+                </button>
+
+            </div>
+
+        </article>
+
+    `).join("");
+
+}
+
+
+/* Запуск игры */
+
+function play(path){
+
+    window.location.href = path;
+
+}
+
+
+/* Открытие админки */
+
+function openModal(){
+
+    document
+    .getElementById("adminModal")
+    .classList.add("open");
+
+}
+
+
+/* Закрытие */
+
+function closeModal(){
+
+    document
+    .getElementById("adminModal")
+    .classList.remove("open");
+
+}
+
+
+/* Вход */
+
+function login(){
+
+    const password =
+        document
+        .getElementById("password")
+        .value;
+
+
+    if(password !== ADMIN_PASSWORD){
+
+        alert("Неверный пароль.");
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "kartaviyAdmin",
+        "1"
+    );
+
+
+    showAdmin();
+
+}
+
+
+/* Выход */
+
+function logout(){
+
+    localStorage.removeItem(
+        "kartaviyAdmin"
+    );
+
+    showLogin();
+
+}
+
+
+/* Экран входа */
+
+function showLogin(){
+
+    document
+    .getElementById("loginView")
+    .classList.remove("hidden");
+
+    document
+    .getElementById("adminView")
+    .classList.add("hidden");
+
+    document
+    .getElementById("editView")
+    .classList.add("hidden");
+
+}
+
+
+/* Админка */
+
+function showAdmin(){
+
+    document
+    .getElementById("loginView")
+    .classList.add("hidden");
+
+    document
+    .getElementById("adminView")
+    .classList.remove("hidden");
+
+    document
+    .getElementById("editView")
+    .classList.add("hidden");
+
+
+    renderAdmin();
+
+}
+
+
+/* Список игр в админке */
+
+function renderAdmin(){
+
+    const box =
+        document.getElementById("adminList");
+
+
+    box.innerHTML =
+        games.map(game => `
+
+        <div class="admin-item">
+
+            <div>
+
+                <b>
+                    ${game.icon}
+                    ${escapeHtml(game.name)}
+                </b>
+
+                <div class="small">
+
+                    ${escapeHtml(game.version)}
+                    ·
+                    ${escapeHtml(game.status)}
+                    ·
+                    ${game.published
+                        ? "🟢 опубликовано"
+                        : "🙈 скрыто"}
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="btn"
+                    onclick="editGame('${game.id}')">
+                    ✏️
+                </button>
+
+                <button
+                    class="btn"
+                    onclick="togglePublish('${game.id}')">
+
+                    ${game.published
+                        ? "🙈"
+                        : "👁️"}
+
+                </button>
+
+                <button
+                    class="btn danger"
+                    onclick="deleteGame('${game.id}')">
+
+                    🗑️
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* Добавление игры */
+
+function showAdd(){
+
+    editingId = null;
+
+
+    document
+    .getElementById("modalTitle")
+    .textContent =
+    "➕ Новая игра";
+
+
+    document.getElementById("fName").value = "";
+
+    document.getElementById("fIcon").value = "🎮";
+
+    document.getElementById("fVersion").value =
+    "v0.1.0";
+
+    document.getElementById("fStatus").value =
+    "В разработке";
+
+    document.getElementById("fPath").value =
+    "games/new-game/index.html";
+
+
+    document
+    .getElementById("adminView")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("editView")
+    .classList.remove("hidden");
+
+}
+
+
+/* Редактирование */
+
+function editGame(id){
+
+    const game =
+        games.find(item => item.id === id);
+
+
+    if(!game) return;
+
+
+    editingId = id;
+
+
+    document
+    .getElementById("modalTitle")
+    .textContent =
+    "✏️ Изменить игру";
+
+
+    document.getElementById("fName").value =
+    game.name;
+
+    document.getElementById("fIcon").value =
+    game.icon;
+
+    document.getElementById("fVersion").value =
+    game.version;
+
+    document.getElementById("fStatus").value =
+    game.status;
+
+    document.getElementById("fPath").value =
+    game.path;
+
+
+    document
+    .getElementById("adminView")
+    .classList.add("hidden");
+
+
+    document
+    .getElementById("editView")
+    .classList.remove("hidden");
+
+}
+
+
+/* Сохранение игры */
+
+function saveGame(){
+
+    const name =
+        document
+        .getElementById("fName")
+        .value
+        .trim();
+
+
+    const path =
+        document
+        .getElementById("fPath")
+        .value
+        .trim();
+
+
+    if(!name || !path){
+
+        alert(
+            "Заполни название и путь."
+        );
+
+        return;
+
+    }
+
+
+    const data = {
+
+        id:
+            editingId ||
+            slug(name),
+
+        name:name,
+
+        icon:
+            document
+            .getElementById("fIcon")
+            .value
+            .trim()
+            ||
+            "🎮",
+
+        version:
+            document
+            .getElementById("fVersion")
+            .value
+            .trim()
+            ||
+            "v0.1.0",
+
+        status:
+            document
+            .getElementById("fStatus")
+            .value,
+
+        path:path,
+
+        published:true
+
+    };
+
+
+    if(editingId){
+
+        const index =
+            games.findIndex(
+                game =>
+                game.id === editingId
+            );
+
+
+        games[index] = {
+            ...games[index],
+            ...data
+        };
+
+    }
+    else{
+
+        games.push(data);
+
+    }
+
+
+    persist();
+
+    render();
+
+    showAdmin();
+
+}
+
+
+/* Назад */
+
+function backAdmin(){
+
+    showAdmin();
+
+}
+
+
+/* Опубликовать / скрыть */
+
+function togglePublish(id){
+
+    const game =
+        games.find(
+            item =>
+            item.id === id
+        );
+
+
+    if(!game) return;
+
+
+    game.published =
+        !game.published;
+
+
+    persist();
+
+    render();
+
+    renderAdmin();
+
+}
+
+
+/* Удалить */
+
+function deleteGame(id){
+
+    if(
+        !confirm(
+            "Удалить игру из списка Hub?"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    games =
+        games.filter(
+            game =>
+            game.id !== id
+        );
+
+
+    persist();
+
+    render();
+
+    renderAdmin();
+
+}
+
+
+/* Создание ID */
+
+function slug(text){
+
+    return text
+        .toLowerCase()
+        .replace(
+            /[^a-z0-9а-яё]+/gi,
+            "-"
+        )
+        .replace(
+            /^-|-$/g,
+            ""
+        )
+        ||
+        "game-" + Date.now();
+
+}
+
+
+/* Безопасный текст */
+
+function escapeHtml(text){
+
+    return String(text)
+        .replace(
+            /[&<>"']/g,
+            char => ({
+
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                "\"":"&quot;",
+                "'":"&#039;"
+
+            }[char])
+        );
+
+}
+
+
+/* Безопасный путь */
+
+function escapeAttr(text){
+
+    return String(text)
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
+}
+
+
+/* Кнопка админа */
+
+document
+.getElementById("adminBtn")
+.addEventListener(
+    "click",
+    () => {
+
+        openModal();
+
+
+        if(
+            localStorage.getItem(
+                "kartaviyAdmin"
+            ) === "1"
+        ){
+
+            showAdmin();
+
+        }
+        else{
+
+            showLogin();
+
+        }
+
+    }
+);
+
+
+/* Поиск */
+
+document
+.getElementById("search")
+.addEventListener(
+    "input",
+    render
+);
+
+
+/* Первый запуск */
+
+render();
+
+</script>
+
+</body>
+</html>
